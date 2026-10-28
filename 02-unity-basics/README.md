@@ -12,8 +12,5 @@ Authors: Maoz Grossman, Or Hadar and Erel Segal-Halevi.
 Inspired by the Udemy course:
 [The Ultimate Guide to Game Development with Unity](https://www.udemy.com/the-ultimate-guide-to-game-development-with-unity/), by Jonathan Weinberger
 
-## מטלות
-
-* [מטלה שבועית](homework.pdf)
-* [מטלה מתגלגלת](yourgame.pdf)
+* [מטלה 2](homework.pdf)
 
