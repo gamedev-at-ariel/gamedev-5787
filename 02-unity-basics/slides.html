@@ -75,24 +75,24 @@
 		<tr style="background:#08f">
 			<th>Unity</th>
 			<td>C#</td>
-			<td style="font-size:32px" >חינם אם מרויחים פחות מ-100,000 $</td>
+			<td style="font-size:32px" >חינם אם מרויחים פחות מ-200,000 $</td>
 			<td>סגור</td>
-			<td>889 (#2)</td>
-			<td>24200 (#1)</td>
+			<td>6K (#1)</td>
+			<td>390K (#1)</td>
 		</tr>
 
 		<tr style="background:#0f0">
 			<th>Unreal</th>
 			<td>C++</td>
-			<td style="font-size:32px" >5% מהרווחים.</td>
+			<td style="font-size:32px" >חינם אם מרויחים פחות מ-1,000,000$.</td>
 			<td>גלוי</td>
-			<td>1726 (#1)</td>
-			<td>1458 (#8)</td>
+			<td>2K (#2)</td>
+			<td>15K (#8)</td>
 		</tr>
 
 		</tbody>
 	</table>
-<a class="small" href="https://www.gamasutra.com/blogs/MarcusToftedahl/20190930/350830/Which_are_the_most_commonly_used_Game_Engines.php">מקור המידע</a>
+<a class="small" href="https://claude.ai/share/2ea892df-4400-4949-b100-2b0409f2c222">מקור המידע</a>
 </section>
 
 
@@ -100,6 +100,7 @@
 	<h2>התחלה</h2>
 	<ul>
 		<li class="fragment">התקנת Unity Hub</li>
+		<li class="fragment">התקנת Unity CLI</li>
 		<li class="fragment">התקנת מנוע Unity - בקורס נעבוד עם גירסה אחידה (פרטים במוודל).</li>
 		<li class="fragment">יצירת פרויקט חדש.</li>
 	</ul>
@@ -118,7 +119,7 @@
 		<li>רכיב מיקום - Transform</li>
 		<li>רכיב תצוגה - Renderer</li>
 		<li>סקריפטים בשפת C#</li>
-		<li>התנהגויות - MonoBehavior</li>
+		<li>התנהגויות - MonoBehaviour</li>
 		<li>קשר בין רכיבים - GetComponent</li>
 		<li>זמנים ומהירויות - Time.deltaTime</li>
 		<li>מאפיינים - Properties [SerializeField] [Tooltip]</li>
@@ -143,14 +144,14 @@
 				<li>קריאת הערך - <span dir='ltr'>ReadValue&lt;Vector2&gt;()</span></li>
 				<li>תרגום מיקום במסך למיקום בעולם - Camera.main.ScreenToWorldPoint</li>
 			</ul>
-			<li>ניהול פעולות קלט - PlayerInput component</li>
+			<!--li>ניהול פעולות קלט - PlayerInput component</li>
 			<ul>
 				<li>תנועה בדידה - <span dir='ltr'>OnMove(InputValue value): position += value.Get&lt;Vector2&gt;()</span></li>
 				<li>תנועה רציפה - <span dir='ltr'>OnMove(InputValue value) + Update()</span></li>
-			</ul>
+			</ul-->
+			<li class="fragment">באג נפוץ: שינוי שדה בעורך ובקוד		</li>
 		</ol>
 	</section>
-	
 
 <section>
 <h2>יוניטי - פרטים טכניים</h2>
@@ -163,12 +164,16 @@
 		<li class="fragment">התאמת הרקע לתצוגה - Canvas, Image</li>
 		<li class="fragment">בנית המשחק - Build Profiles: Windows, WebGL</li>
 		<li class="fragment">גודל מסך המשחק - Player Settings</li>
+		<li class="fragment">שם החבילה לאנדרואיד - Package Name</li>
+		<li class="fragment">רמת ממשק לאנדרואיד - API Level</li>
+		<li class="fragment">כיוון מסך - Default orientation</li>
 		<li class="fragment">פירסום המשחק -
 		<a href="http://itch.io">itch.io</a>
 		</li>
 	
 	</ol>
 </section>
+
 
 
 </div>
