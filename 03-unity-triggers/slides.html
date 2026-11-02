@@ -12,6 +12,10 @@
 		<link rel="stylesheet" href="../revealjs/lib/css/monokai.css" />		<!-- Theme used for syntax highlighting of code -->
 
 		<link rel="stylesheet" href="../utils/slides.css" />
+		<style>
+			/* inline English/code inside Hebrew text keeps its own direction */
+			.reveal [dir="ltr"] { direction: ltr; unicode-bidi: isolate; }
+		</style>
 	</head>
 <body>
 
@@ -30,9 +34,11 @@
 	<h1>בניית תהליכי ליבה</h1>
 	<h2>נושאים ללימוד:</h2>
 	<ul>
+	<li>התאמת קלט למובייל - On-screen controls</li>
 	<li>דגמים - Prefabs</li>
 	<li>התנגשויות - Collisions</li>
 	<li>ניהול שלבים - Scene management</li>
+	<li>מחזור החיים של עצם - Lifecycle</li>
 	</ul>
 	<h2>משחקים להדגמה:</h2>
 	<ul>
@@ -40,6 +46,197 @@
 		<!--li>פלטפורמה ב-2.5 ממדים</li--->
 	</ul>
 </section>
+
+
+
+<section>
+
+	<section>
+		<h1>התאמה למובייל</h1>
+		<h2>פעולות קלט על מסך מגע</h2>
+		<p style="font-size:80%">
+			בסצינה <span dir="ltr">movement-and-control</span>
+			החללית זזה עם <b>החיצים</b>
+			(<span dir="ltr">InputMover</span> + פעולת הקלט <span dir="ltr">Move</span>).
+			<br/>
+			בטלפון אין מקלדת.
+		</p>
+		<p class="fragment green">הפתרון: ג'ויסטיק על המסך - בלי לשנות אף שורת קוד.</p>
+	</section>
+
+
+	<section>
+		<h2>הרעיון: גיימפד וירטואלי</h2>
+		<svg viewBox="0 0 1000 260" width="100%" style="direction:ltr">
+			<defs>
+				<marker id="arrM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+					<path d="M0,0 L10,5 L0,10 z" fill="#ddd"/>
+				</marker>
+			</defs>
+			<g fill="none" stroke-width="3">
+				<rect x="10"  y="30"  width="230" height="60" rx="8" stroke="#42affa"/>
+				<rect x="10"  y="150" width="230" height="60" rx="8" stroke="#8fd16a"/>
+				<rect x="300" y="150" width="270" height="60" rx="8" stroke="#8fd16a"/>
+				<rect x="630" y="55"  width="150" height="120" rx="8" stroke="#ddd"/>
+				<rect x="830" y="85"  width="160" height="60" rx="8" stroke="#ddd"/>
+			</g>
+			<g font-family="monospace" font-size="22" text-anchor="middle">
+				<text x="125" y="67"  fill="#42affa">Arrow keys</text>
+				<text x="125" y="187" fill="#8fd16a">OnScreenStick</text>
+				<text x="435" y="187" fill="#8fd16a">&lt;Gamepad&gt;/leftStick</text>
+				<text x="705" y="110" fill="#fff">Move</text>
+				<text x="705" y="140" fill="#aaa" font-size="16">2 bindings</text>
+				<text x="910" y="122" fill="#fff">InputMover</text>
+			</g>
+			<g stroke="#ddd" stroke-width="2.5" fill="none" marker-end="url(#arrM)">
+				<path d="M 240 60 L 627 95"/>
+				<path d="M 240 180 L 297 180"/>
+				<path d="M 570 180 L 627 140"/>
+				<path d="M 780 115 L 827 115"/>
+			</g>
+			<g font-size="20" text-anchor="middle" fill="#ccc">
+				<text x="125" y="238">ג'ויסטיק על המסך</text>
+				<text x="435" y="238">גיימפד וירטואלי</text>
+				<text x="910" y="172">הקוד לא השתנה</text>
+			</g>
+		</svg>
+		<ul style="font-size:70%">
+			<li class="fragment"><code dir="ltr">OnScreenStick</code>
+				"מתחזה" לגיימפד: גרירה של התמונה מזינה את
+				<code dir="ltr">&lt;Gamepad&gt;/leftStick</code>.</li>
+			<li class="fragment"><code dir="ltr">InputMover</code> עדיין קורא
+				<code dir="ltr">move.ReadValue&lt;Vector2&gt;()</code>
+				- לא יודע ולא אכפת לו מאיפה הגיע הערך.</li>
+			<li class="fragment green">זה היתרון של פעולת קלט: הקוד מדבר על "תזוזה", לא על "חיצים".</li>
+		</ul>
+	</section>
+
+
+	<section>
+		<h2>שלב 1: הקלט</h2>
+		<ol style="font-size:80%">
+			<li class="fragment">משכפלים את הסצינה (<span dir="ltr">Ctrl+D</span> בחלון Project).
+				<div style="font-style:italic; margin-right:3em;">המקורית נשארת כמו שהיא.</div></li>
+			<li class="fragment">בפעולה <span dir="ltr">Move</span> של <span dir="ltr">InputMover</span>
+				מוסיפים <b>binding</b>: <code dir="ltr">&lt;Gamepad&gt;/leftStick</code>.
+				<div class="blue" style="margin-right:3em;">החיצים נשארים - כדי לבדוק גם במחשב.</div></li>
+			<li class="fragment">מוסיפים <b dir="ltr">EventSystem</b> עם
+				<code dir="ltr">InputSystemUIInputModule</code>.
+				<div class="red" style="margin-right:3em;">בלעדיו אף רכיב ממשק לא מקבל מגע.</div></li>
+		</ol>
+	</section>
+
+
+	<section>
+		<h2>שלב 2: הממשק</h2>
+		<pre dir="ltr" style="font-size:45%"><code class="nohighlight" data-trim>
+EventSystem             InputSystemUIInputModule
+MobileControlsCanvas    Canvas: Screen Space - Overlay
+                        Canvas Scaler: Scale With Screen Size, 1920x1080
+└─ JoystickBackground   Image (25% opacity), Raycast Target: OFF
+   │                    anchor: bottom-left, 320x320
+   └─ JoystickHandle    Image (70% opacity), Raycast Target: ON
+                        OnScreenStick
+		</code></pre>
+		<ul style="font-size:70%">
+			<li class="fragment"><b dir="ltr">Canvas Scaler</b> - הג'ויסטיק בגודל סביר בכל טלפון, בכל רזולוציה.</li>
+			<li class="fragment">מעוגן לפינה <b>השמאלית התחתונה</b> - איפה שהאגודל השמאלי נח.</li>
+			<li class="fragment">הרקע הוא רק קישוט; <b>הידית</b> היא מה שנוגעים בו.</li>
+		</ul>
+	</section>
+
+
+	<section>
+		<h2>הגדרות OnScreenStick</h2>
+		<table style="font-size:60%">
+			<tr>
+				<td dir="ltr" class="blue">Control Path</td>
+				<td dir="ltr">&lt;Gamepad&gt;/leftStick</td>
+				<td>חייב להתאים ל-binding שהוספנו.</td>
+			</tr>
+			<tr>
+				<td dir="ltr" class="blue">Movement Range</td>
+				<td dir="ltr">100</td>
+				<td>כמה רחוק אפשר לגרור את הידית. גרירה מלאה = ערך 1 = מהירות מלאה.</td>
+			</tr>
+			<tr>
+				<td dir="ltr" class="blue">Behaviour</td>
+				<td dir="ltr">Relative Position<br/>With Static Origin</td>
+				<td>הג'ויסטיק במקום קבוע. מרימים את האצבע - הידית חוזרת למרכז והחללית עוצרת.</td>
+			</tr>
+		</table>
+		<p class="fragment" style="font-size:65%">
+			ג'ויסטיק "צף", שמופיע איפה שהאגודל נוגע:
+			<span dir="ltr" class="green">Exact Position With Dynamic Origin</span>.
+		</p>
+	</section>
+
+
+	<section>
+		<h2>למה זה לא עובד?</h2>
+		<table style="font-size:60%">
+			<thead>
+				<tr><th>סימפטום</th><th>מה לבדוק</th></tr>
+			</thead>
+			<tbody>
+				<tr class="fragment">
+					<td>הג'ויסטיק לא מגיב בכלל.</td>
+					<td>יש <span dir="ltr">EventSystem</span> בסצינה? יש לידית Raycast Target?</td>
+				</tr>
+				<tr class="fragment">
+					<td>הידית זזה, החללית לא.</td>
+					<td>ה-Control Path תואם ל-binding של <span dir="ltr">Move</span>?</td>
+				</tr>
+				<tr class="fragment">
+					<td>הג'ויסטיק זעיר בטלפון.</td>
+					<td><span dir="ltr">Canvas Scaler</span> על <span dir="ltr">Scale With Screen Size</span>?</td>
+				</tr>
+				<tr class="fragment">
+					<td>הג'ויסטיק מתחת לפינה המעוגלת או לפס המחוות.</td>
+					<td>Safe Area.</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+
+	<section>
+		<h2>בדיקה</h2>
+		<ol style="font-size:80%">
+			<li class="fragment"><b>בעורך, עם עכבר:</b> גוררים את הידית. גם החיצים עובדים.</li>
+			<li class="fragment"><b>בעורך, כמו בטלפון:</b> בחלון Game בוחרים <b>Simulator</b> ודגם טלפון.
+				לחיצות עכבר נשלחות כמגע.</li>
+			<li class="fragment"><b>בטלפון אמיתי:</b>
+				<span dir="ltr">File &rarr; Build Profiles</span>, הסצינה ראשונה ב-Scene List, ואז:
+				<ul>
+					<li><b>Web</b> - פותחים את הדף בדפדפן של הטלפון.</li>
+					<li><b>Android / iOS</b> - אפליקציה.</li>
+				</ul>
+			</li>
+		</ol>
+		<p class="fragment" style="font-size:60%">
+			כיוון המסך: לאורך רואים פחות מהעולם לרוחב.
+			לנעול לרוחב:
+			<span dir="ltr">Player Settings &rarr; Default Orientation = Landscape Left</span>
+			(הגדרה לכל הפרויקט).
+		</p>
+	</section>
+
+
+	<section>
+		<h2>ומה עם ירי?</h2>
+		<p style="font-size:80%">אותה שיטה בדיוק, עם כפתור:</p>
+		<ul style="font-size:80%">
+			<li class="fragment"><code dir="ltr">OnScreenButton</code> עם Control Path
+				<code dir="ltr">&lt;Gamepad&gt;/buttonSouth</code>.</li>
+			<li class="fragment">בפעולה <span dir="ltr">Fire</span> - binding תואם:
+				<code dir="ltr">&lt;Gamepad&gt;/buttonSouth</code>.</li>
+			<li class="fragment">ממקמים בפינה <b>הימנית</b> התחתונה - לאגודל הימני.</li>
+		</ul>
+		<p class="fragment green">תרגיל: הוסיפו כפתור ירי לסצינת הלייזר.</p>
+	</section>
+
+</section> <!-- end of mobile input -->
 
 
 
@@ -146,8 +343,245 @@
 
 
 <section>
+
+	<section>
+		<h1>מחזור החיים של עצם</h1>
+		<p>יוניטי קוראת לפונקציות של הרכיבים שלכם בסדר קבוע:</p>
+		<svg viewBox="0 0 1120 210" width="100%" style="direction:ltr">
+			<defs>
+				<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+					<path d="M0,0 L10,5 L0,10 z" fill="#ddd"/>
+				</marker>
+			</defs>
+			<g font-family="monospace" font-size="22" text-anchor="middle">
+				<rect x="5"   y="70" width="130" height="50" rx="8" fill="none" stroke="#42affa" stroke-width="3"/>
+				<text x="70"  y="102" fill="#42affa">Awake</text>
+				<rect x="160" y="70" width="140" height="50" rx="8" fill="none" stroke="#42affa" stroke-width="3"/>
+				<text x="230" y="102" fill="#42affa">OnEnable</text>
+				<rect x="325" y="70" width="120" height="50" rx="8" fill="none" stroke="#42affa" stroke-width="3"/>
+				<text x="385" y="102" fill="#42affa">Start</text>
+
+				<rect x="490" y="70" width="130" height="50" rx="8" fill="none" stroke="#8fd16a" stroke-width="3"/>
+				<text x="555" y="102" fill="#8fd16a">Update</text>
+				<rect x="645" y="70" width="150" height="50" rx="8" fill="none" stroke="#8fd16a" stroke-width="3"/>
+				<text x="720" y="102" fill="#8fd16a">LateUpdate</text>
+
+				<rect x="840" y="70" width="140" height="50" rx="8" fill="none" stroke="#ff7b7b" stroke-width="3"/>
+				<text x="910" y="102" fill="#ff7b7b">OnDisable</text>
+				<rect x="840" y="140" width="140" height="50" rx="8" fill="none" stroke="#ff7b7b" stroke-width="3"/>
+				<text x="910" y="172" fill="#ff7b7b">OnDestroy</text>
+			</g>
+			<g stroke="#ddd" stroke-width="2.5" fill="none" marker-end="url(#arr)">
+				<line x1="135" y1="95" x2="157" y2="95"/>
+				<line x1="300" y1="95" x2="322" y2="95"/>
+				<line x1="445" y1="95" x2="487" y2="95"/>
+				<line x1="620" y1="95" x2="642" y2="95"/>
+				<path d="M 720 70 C 720 25, 555 25, 555 67"/>
+				<line x1="795" y1="95" x2="837" y2="95"/>
+				<line x1="910" y1="120" x2="910" y2="137"/>
+			</g>
+			<g font-size="22" text-anchor="middle" fill="#ddd">
+				<text x="225" y="40">יצירה</text>
+				<text x="637" y="20">כל פריים</text>
+				<text x="1050" y="100">מחיקה</text>
+			</g>
+		</svg>
+		<p class="fragment" style="font-size:70%">
+			גם כשמכבים רכיב
+			<code dir="ltr">enabled = false</code>
+			או עצם
+			<code dir="ltr">SetActive(false)</code>
+			נקרא <code dir="ltr">OnDisable</code>,
+			וכשמדליקים שוב - <code dir="ltr">OnEnable</code>.
+		</p>
+	</section>
+
+
+	<section>
+		<h2>מה עושים בכל פונקציה?</h2>
+		<table style="font-size:60%">
+			<thead>
+				<tr>
+					<th>פונקציה</th>
+					<th>מתי נקראת?</th>
+					<th>מה עושים בה?</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td dir="ltr" class="blue">Awake</td>
+					<td>פעם אחת, כשהעצם נוצר.</td>
+					<td>מאתחלים את העצם <b>עצמו</b>: <code dir="ltr">GetComponent</code>.</td>
+				</tr>
+				<tr>
+					<td dir="ltr" class="blue">OnEnable</td>
+					<td>אחרי Awake, ובכל פעם שהרכיב מופעל.</td>
+					<td>נרשמים לאירועים, מפעילים פעולות קלט.</td>
+				</tr>
+				<tr>
+					<td dir="ltr" class="blue">Start</td>
+					<td>פעם אחת, לפני ה-Update הראשון.</td>
+					<td>פונים לעצמים <b>אחרים</b>.</td>
+				</tr>
+				<tr>
+					<td dir="ltr" class="green">Update</td>
+					<td>בכל פריים.</td>
+					<td>קלט, תנועה, לוגיקה.</td>
+				</tr>
+				<tr>
+					<td dir="ltr" class="green">LateUpdate</td>
+					<td>בכל פריים, אחרי כל ה-Update.</td>
+					<td>מצלמה שעוקבת אחרי השחקן.</td>
+				</tr>
+				<tr>
+					<td dir="ltr" class="red">OnDisable</td>
+					<td>כשהרכיב מכובה או נמחק.</td>
+					<td>מבטלים הרשמות, מכבים פעולות קלט.</td>
+				</tr>
+				<tr>
+					<td dir="ltr" class="red">OnDestroy</td>
+					<td>כשהעצם נמחק.</td>
+					<td>משחררים משאבים.</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+
+	<section>
+		<h2>כלל 1: Awake ו-Start</h2>
+		<p style="font-size:80%"><span dir="ltr">Awake</span> - רק לעצמך. <span dir="ltr">Start</span> - גם לאחרים.</p>
+		<pre dir="ltr"><code class="cs" data-trim>
+public class ScoreDisplay : MonoBehaviour {
+    Text label;
+    void Awake() {      // only this object
+        label = GetComponent&lt;Text&gt;();
+    }
+    void Start() {      // now it is safe to use others
+        ScoreManager.Instance.ScoreChanged += Show;
+    }
+}
+		</code></pre>
+		<p class="fragment" style="font-size:65%">
+			למה? <span class="blue">"הסדר בין עצמים שונים אינו קבוע"</span>
+			<small>(<a href="https://docs.unity3d.com/6000.0/Documentation/Manual/execution-order.html">תיעוד יוניטי</a>)</small>.
+			<br/>
+			אם ה-Awake של <span dir="ltr">ScoreDisplay</span> ירוץ לפני ה-Awake של
+			<span dir="ltr">ScoreManager</span> -
+			<code dir="ltr">Instance</code> עוד יהיה null.
+		</p>
+	</section>
+
+
+	<section>
+		<h2>כלל 2: מראה</h2>
+		<pre dir="ltr"><code class="cs" data-trim>
+void OnEnable() {
+    fire.Enable();
+    fire.performed += Shoot;
+}
+
+void OnDisable() {
+    fire.performed -= Shoot;
+    fire.Disable();
+}
+		</code></pre>
+		<ul style="font-size:75%">
+			<li class="fragment">כל מה שעושים ב-OnEnable - מבטלים ב-OnDisable, בסדר הפוך.</li>
+			<li class="fragment">OnDisable נקרא <b>תמיד</b> לפני שהעצם נעלם: כיבוי, Destroy, מעבר סצינה.</li>
+			<li class="fragment red">שכחתם? החללית שהושמדה תמשיך "לירות" - ותזרוק שגיאות.</li>
+		</ul>
+	</section>
+
+
+	<section>
+		<h2>Instantiate - מתי מה רץ?</h2>
+		<pre dir="ltr"><code class="cs" data-trim>
+Laser laser = Instantiate(laserPrefab, pos, rot);
+// Awake and OnEnable of the laser have ALREADY run here
+laser.speed = 10;
+// Start has NOT run yet - it will see speed = 10
+		</code></pre>
+		<ul style="font-size:75%">
+			<li class="fragment"><code dir="ltr">Awake</code> ו-<code dir="ltr">OnEnable</code>
+				רצים מיד, בתוך <code dir="ltr">Instantiate</code>.</li>
+			<li class="fragment"><code dir="ltr">Start</code> רץ רק לפני ה-Update הראשון של העצם החדש.</li>
+			<li class="fragment green">ולכן: ערכים שנקבעים אחרי Instantiate - קוראים אותם ב-Start, לא ב-Awake.</li>
+		</ul>
+	</section>
+
+
+	<section>
+		<h2>Destroy - לא מיד!</h2>
+		<p style="font-size:75%">
+			<code dir="ltr">Destroy</code> מסמן את העצם למחיקה <b>בסוף הפריים</b>.
+			הקוד שאחריו ממשיך לרוץ.
+		</p>
+		<p class="fragment red" style="font-size:75%">
+			באג נפוץ: שני לייזרים פוגעים באותו אויב באותו פריים
+			&larr; שני טריגרים &larr; ניקוד כפול.
+		</p>
+		<pre dir="ltr" class="fragment"><code class="cs" data-trim>
+bool isDead;
+
+void OnTriggerEnter2D(Collider2D other) {
+    if (isDead) return;             // already hit
+    if (!other.CompareTag("Laser")) return;
+    isDead = true;
+    ScoreManager.Instance.Add(10);
+    Destroy(gameObject);            // at the end of the frame
+}
+		</code></pre>
+	</section>
+
+
+	<section>
+		<h2>מה קורה במעבר סצינה?</h2>
+		<ul style="font-size:80%">
+			<li class="fragment">כל העצמים בסצינה הישנה:
+				<span dir="ltr">OnDisable &rarr; OnDestroy</span>.</li>
+			<li class="fragment">כל העצמים בסצינה החדשה:
+				<span dir="ltr">Awake &rarr; OnEnable &rarr; Start</span>.</li>
+			<li class="fragment">מה שורד: <b>משתנים סטטיים</b>,
+				ועצמים עם <code dir="ltr">DontDestroyOnLoad</code>.</li>
+		</ul>
+		<div class="fragment" style="font-size:75%">
+			<p class="blue">ולכן "משתנה סטטי - קל בהתחלה, קשה בהמשך":</p>
+			<ul>
+				<li>מונה סטטי לא מתאפס כשמתחילים שלב מחדש.</li>
+				<li>מי שנרשם לאירוע סטטי ולא ביטל ב-OnDisable - נשאר רשום גם אחרי שנמחק.</li>
+			</ul>
+		</div>
+	</section>
+
+
+	<section>
+		<h2>פריים אחד</h2>
+		<ol style="font-size:80%">
+			<li>קריאת קלט מהמקלדת, העכבר, המסך.</li>
+			<li><code dir="ltr">Update</code> של כל הרכיבים.</li>
+			<li><code dir="ltr">LateUpdate</code> של כל הרכיבים - אחרי שכולם זזו.</li>
+			<li>ציור הפריים על המסך.</li>
+		</ol>
+		<p class="fragment blue" style="font-size:75%">
+			ויש עוד שעון: <code dir="ltr">FixedUpdate</code> - קצב קבוע, בשביל הפיזיקה.
+			גם הטריגרים קשורים אליו.
+			<br/>
+			פרטים - בשבוע הבא.
+		</p>
+		<p style="font-size:60%">
+			<a href="https://docs.unity3d.com/6000.0/Documentation/Manual/execution-order.html">התרשים המלא באתר יוניטי</a>
+		</p>
+	</section>
+
+</section> <!-- end of lifecycle -->
+
+
+
+<section>
 <h2>מושגים שלמדנו היום</h2>
 <ul>
+	<li>קלט על המסך - OnScreenStick, OnScreenButton, EventSystem</li>
 	<li>Prefab - דגם</li>
 	<li>Instantiate - יצירת עצם, Destroy - מחיקת עצם</li>
 	<li>Collision/Trigger - התנגשות</li>
@@ -155,12 +589,9 @@
 	<li>פעולות אסינכרוניות - async, await</li>
 	<li>ירושה ב C#</li>
 	<li>מעבר סצינות - LoadScene</li>
+	<li>מחזור החיים - Awake, OnEnable, Start, Update, LateUpdate, OnDisable, OnDestroy</li>
 </ul>
-
-
-
-</div>
-</div>
+</section>
 
 
 
