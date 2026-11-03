@@ -474,7 +474,7 @@ MobileControlsCanvas    Canvas: Screen Space - Overlay         - מצע לפקד
 	<section>
 		<h2>כלל 1: Awake ו-Start</h2>
 		<p style="font-size:80%"><span dir="ltr">Awake</span> - רק לעצמך. <span dir="ltr">Start</span> - גם לאחרים.</p>
-		<pre dir="ltr"><code class="cs" data-trim>
+		<pre dir="ltr" style="text-align: left;"><code class="cs" data-trim>
 public class ScoreDisplay : MonoBehaviour {
     Text label;
     void Awake() {      // only this object
@@ -498,7 +498,7 @@ public class ScoreDisplay : MonoBehaviour {
 
 	<section>
 		<h2>כלל 2: מראה</h2>
-		<pre dir="ltr"><code class="cs" data-trim>
+		<pre dir="ltr" style="text-align: left;"><code class="cs" data-trim>
 void OnEnable() {
     fire.Enable();
     fire.performed += Shoot;
@@ -519,7 +519,7 @@ void OnDisable() {
 
 	<section>
 		<h2>Instantiate - מתי מה רץ?</h2>
-		<pre dir="ltr"><code class="cs" data-trim>
+		<pre dir="ltr" style="text-align: left;"><code class="cs" data-trim>
 Laser laser = Instantiate(laserPrefab, pos, rot);
 // Awake and OnEnable of the laser have ALREADY run here
 laser.speed = 10;
@@ -544,7 +544,7 @@ laser.speed = 10;
 			באג נפוץ: שני לייזרים פוגעים באותו אויב באותו פריים
 			&larr; שני טריגרים &larr; ניקוד כפול.
 		</p>
-		<pre dir="ltr" class="fragment"><code class="cs" data-trim>
+		<pre dir="ltr" class="fragment"  style="text-align: left;"><code class="cs" data-trim>
 bool isDead;
 
 void OnTriggerEnter2D(Collider2D other) {
@@ -604,7 +604,7 @@ void OnTriggerEnter2D(Collider2D other) {
 <section>
 <h2>מושגים שלמדנו היום</h2>
 <ul>
-	<li>קלט על המסך - OnScreenStick, OnScreenButton, EventSystem</li>
+	<li>קלט על המסך - OnScreenStick</li>
 	<li>Prefab - דגם</li>
 	<li>Instantiate - יצירת עצם, Destroy - מחיקת עצם</li>
 	<li>Collision/Trigger - התנגשות</li>
