@@ -52,7 +52,7 @@
 <section>
 
 	<section>
-		<h1>התאמה למובייל</h1>
+		<h1>התאמה לטלפונים ניידים</h1>
 		<h2>פעולות קלט על מסך מגע</h2>
 		<p style="font-size:80%">
 			בסצינה <span dir="ltr">movement-and-control</span>
@@ -115,8 +115,6 @@
 	<section>
 		<h2>שלב 1: הקלט</h2>
 		<ol style="font-size:80%">
-			<li class="fragment">משכפלים את הסצינה (<span dir="ltr">Ctrl+D</span> בחלון Project).
-				<div style="font-style:italic; margin-right:3em;">המקורית נשארת כמו שהיא.</div></li>
 			<li class="fragment">בפעולה <span dir="ltr">Move</span> של <span dir="ltr">InputMover</span>
 				מוסיפים <b>binding</b>: <code dir="ltr">&lt;Gamepad&gt;/leftStick</code>.
 				<div class="blue" style="margin-right:3em;">החיצים נשארים - כדי לבדוק גם במחשב.</div></li>
@@ -129,19 +127,18 @@
 
 	<section>
 		<h2>שלב 2: הממשק</h2>
-		<pre dir="ltr" style="font-size:45%"><code class="nohighlight" data-trim>
-EventSystem             InputSystemUIInputModule
-MobileControlsCanvas    Canvas: Screen Space - Overlay
+		<pre dir="ltr" style="text-align:left; font-size:45%"><code class="nohighlight" data-trim>
+EventSystem             InputSystemUIInputModule - מערכת טיפול באירועי קלט. 
+MobileControlsCanvas    Canvas: Screen Space - Overlay         - מצע לפקדי קלט
                         Canvas Scaler: Scale With Screen Size, 1920x1080
-└─ JoystickBackground   Image (25% opacity), Raycast Target: OFF
+└─ JoystickBackground   Image (25% opacity), Raycast Target: OFF   - ליופי בלבד
    │                    anchor: bottom-left, 320x320
-   └─ JoystickHandle    Image (70% opacity), Raycast Target: ON
+   └─ JoystickHandle    Image (70% opacity), Raycast Target: ON    - פקד הקלט 
                         OnScreenStick
 		</code></pre>
 		<ul style="font-size:70%">
-			<li class="fragment"><b dir="ltr">Canvas Scaler</b> - הג'ויסטיק בגודל סביר בכל טלפון, בכל רזולוציה.</li>
-			<li class="fragment">מעוגן לפינה <b>השמאלית התחתונה</b> - איפה שהאגודל השמאלי נח.</li>
-			<li class="fragment">הרקע הוא רק קישוט; <b>הידית</b> היא מה שנוגעים בו.</li>
+			<li class="fragment"><b dir="ltr">CanvasScaler</b> - הג'ויסטיק בגודל סביר בכל טלפון, בכל רזולוציה.</li>
+			<li class="fragment"><b dir="ltr">JoystickBackground</b> - מעוגן לפינה <b>השמאלית התחתונה</b> - איפה שהאגודל השמאלי נח.</li>
 		</ul>
 	</section>
 
@@ -188,19 +185,19 @@ MobileControlsCanvas    Canvas: Screen Space - Overlay
 					<td>ה-Control Path תואם ל-binding של <span dir="ltr">Move</span>?</td>
 				</tr>
 				<tr class="fragment">
-					<td>הג'ויסטיק זעיר בטלפון.</td>
+					<td>הג'ויסטיק קטן מדי או גדול מדי בטלפון.</td>
 					<td><span dir="ltr">Canvas Scaler</span> על <span dir="ltr">Scale With Screen Size</span>?</td>
 				</tr>
 				<tr class="fragment">
 					<td>הג'ויסטיק מתחת לפינה המעוגלת או לפס המחוות.</td>
-					<td>Safe Area.</td>
+					<td> Player Settings - Resolution and Presentation - Render outside safe area - False.</td>
 				</tr>
 			</tbody>
 		</table>
 	</section>
 
 
-	<section>
+	<!--section>
 		<h2>בדיקה</h2>
 		<ol style="font-size:80%">
 			<li class="fragment"><b>בעורך, עם עכבר:</b> גוררים את הידית. גם החיצים עובדים.</li>
@@ -220,7 +217,7 @@ MobileControlsCanvas    Canvas: Screen Space - Overlay
 			<span dir="ltr">Player Settings &rarr; Default Orientation = Landscape Left</span>
 			(הגדרה לכל הפרויקט).
 		</p>
-	</section>
+	</section-->
 
 
 	<section>
@@ -242,6 +239,7 @@ MobileControlsCanvas    Canvas: Screen Space - Overlay
 
 <section>
 	<h1>דגמים - Prefabs</h1>
+	<section>
 	<p class="blue">
 		Prefab = pre-fabricated =
 		דגם מוכן מראש של עצם-משחק, המאפשר לייצר עותקים רבים של אותו עצם.
@@ -252,10 +250,35 @@ MobileControlsCanvas    Canvas: Screen Space - Overlay
 		<li>Override - החלפת מאפיין של דגם באחד העותקים</li>
 		<li>שינוי מאפיין בדגם משנה את כל העותקים שלא הוחלפו</li>
 		<li>Apply - העתקת מאפיין מעותק אחד אל הדגם</li>
-		<li>Instantiate - יצירת עותק מתוך הקוד</li>
-		<li>קניית דגמים ב<a href="https://assetstore.unity.com/packages/2d/characters/2d-animated-spaceships-96852/">חנות נכסים - Asset Store</a></li>
-		<li>IMPORTANT: READ THE LICENSE!!!</li>
 	</ol>
+	</section>
+<section>
+	<p class="blue">
+		יצירת עותק מתוך הקוד - Instantiate.
+	</p>
+	<ul>
+		<li>מאיפה נקרא ל-Instantiate?</li>
+		<li class="fragment">---- מתוך עצם ריק - Spawner.</li>
+
+		<li class="fragment">מתי נייצר אויבים חדשים?</li>
+		<li class="fragment">---- לפי קלט; לפי זמן.</li>
+	</ul>
+</section>
+
+<section>
+	<p class="blue">
+		שיפור הגרפיקה - שימוש בנכסים מוכנים
+	</p>
+	<ul>
+		<li>אפשרות א - קניית דגמים ב<a href="https://assetstore.unity.com/packages/2d/characters/2d-animated-spaceships-96852/">חנות נכסים - Asset Store</a>.</li>
+		<li class="fragment">---- בעיה: רשיון שימוש מגביל הפצה בקוד פתוח.</li>
+
+		<li class="fragment">אפשרות ב - יצירת דגם ע"י סוכן בינה מלאכותית.</li>
+		<li class="fragment">---- "Replace the player spaceship by a prefab of a spaceship with animation."</li>
+
+	</ul>
+</section>
+
 </section>
 
 
