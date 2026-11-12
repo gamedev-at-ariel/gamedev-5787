@@ -4,5 +4,5 @@ Code samples can be found [here](https://github.com/gamedev-at-ariel) in reposit
 
 ## מטלות
 
-* [מטלה שבועית](homework-architecture.pdf)
 * [מטלה מתגלגלת](yourgame.pdf)
+* [מטלה שבועית](homework-architecture.pdf)

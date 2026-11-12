@@ -11,6 +11,6 @@ Inspired by the Udemy course:
 
 ## מטלות
 
-* [מטלה שבועית](homework.improvegame.pdf)
-* [מטלה מתגלגלת](yourgame.leveldesign.pdf)
+* [מטלה 3](homework.pdf)
+* [מטלת רשות - ללא ציון](homework.improvegame.pdf)
 
