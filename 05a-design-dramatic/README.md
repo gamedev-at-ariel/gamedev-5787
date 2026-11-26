@@ -2,6 +2,5 @@
 
 ## מטלות
 
-* [מטלה שבועית](yourgame.pdf)
+* [מטלה 5](yourgame.pdf)
 * [מטלת רשות - לא להגשה](playwork.pdf)
-
